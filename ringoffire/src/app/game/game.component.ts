@@ -9,7 +9,7 @@ import { MatDialog, MatDialogContent, MatDialogActions, MatDialogClose } from '@
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { GameInfoComponent } from '../game-info/game-info.component';
 
 
@@ -31,7 +31,7 @@ import { GameInfoComponent } from '../game-info/game-info.component';
     MatInputModule,
     MatFormFieldModule,
     MatDialogModule,
-    ],
+  ],
 
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
@@ -56,24 +56,27 @@ export class GameComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
-    dialogRef.afterClosed().subscribe((name:string) => {
-      if(name.length > 0){
-      this.game.players.push(name);
-    }
+    dialogRef.afterClosed().subscribe((name: string) => {
+      if (name && name.length > 0) {
+        this.game.players.push(name);
+      }
     });
   }
 
   takeCard() {
-    if (!this.pickCardAnimation) {
+    if (this.game.players.length < 1) {
+      alert('Please use 2 Players');
+    } else if (this.game.players.length < 2) {
+      alert('Please use 1 Player more');
+    } else if (!this.pickCardAnimation) {
       this.currentCard = this.game.stack.pop() || 'undefined';
       this.pickCardAnimation = true;
       this.game.currentPlayer++;
-      this.game.currentPlayer =  this.game.currentPlayer %  this.game.players.length;
+      this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
-
-      }, 1000)
+      }, 1000);
     }
   }
 }
